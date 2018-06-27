@@ -14,7 +14,7 @@
 #define SCREENW [UIScreen mainScreen].bounds.size.width
 #define SCREENH [UIScreen mainScreen].bounds.size.height
 
-@interface ViewController ()<UITableViewDelegate,UITableViewDataSource,ScrollMenuDIYFBCDelgate>
+@interface ViewController ()<UITableViewDelegate,UITableViewDataSource,ScrollMenuDIYFBCDelgate,ScrollBannerFBCdelegate>
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) UITableView *producListTableView;
 @property (nonatomic,strong) NSArray *dataArray;
@@ -22,6 +22,7 @@
 
 @property (nonatomic,strong) UIView *navView;
 @property (nonatomic,strong) UIView *searchView;
+@property (nonatomic,strong) UIButton *headMessage;
 
 @property (nonatomic,strong) ScrollBannerFBC *scrollBannerFBC;
 @property (nonatomic,strong) ScrollMenuView *scrollMenu;
@@ -33,7 +34,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     //self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
-    self.navigationController.navigationBar.translucent = YES;
+    //self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.hidden = YES;
 }
 
@@ -49,21 +50,32 @@
 }
 -(void)setUpNav{
 
-    [self.view addSubview:self.navView];
+    [self.scrollBannerFBC addSubview:self.navView];
     
     [self.navView addSubview:self.searchView];
+    
+    [self.navView addSubview:self.headMessage];
     
 }
 -(UIView *)searchView{
     if (!_searchView) {
         
-        _searchView = [[UIView alloc] initWithFrame:CGRectMake(30, 7, SCREENW - 30 - 60, 30)];
+        _searchView = [[UIView alloc] initWithFrame:CGRectMake(35, 7, SCREENW - 35 - 60, 30)];
         _searchView.layer.borderWidth = 0.5;
-        _searchView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        _searchView.layer.borderColor = [UIColor lightTextColor].CGColor;
+        _searchView.layer.cornerRadius = 10;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapSearch)];
         [_searchView addGestureRecognizer:tap];
     }
     return _searchView;
+}
+-(UIButton *)headMessage{
+    if (!_headMessage) {
+        
+        _headMessage = [[UIButton alloc] initWithFrame:CGRectMake(SCREENW - 45, 7, 30, 30)];
+        [_headMessage setImage:[UIImage imageNamed:@"msg"] forState:UIControlStateNormal];
+    }
+    return _headMessage;
 }
 -(void)tapSearch{
     MainViewController *main = [MainViewController new];
@@ -73,8 +85,6 @@
     if (!_navView) {
         
         _navView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 44)];
-        _navView.alpha = 0.5;
-        //_navView.hidden = YES;
         _navView.backgroundColor = [UIColor clearColor];
     }
     return _navView;
@@ -83,8 +93,9 @@
     
     if (!_scrollBannerFBC) {
         
-        _scrollBannerFBC = [[ScrollBannerFBC alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width , [UIScreen mainScreen].bounds.size.width * 0.56) andBannerArray:@[@"1",@"2",@"3",@"4",@"5",@"6"] andBannerBackGroundArray:@[@"p1",@"p2",@"p3",@"p4",@"p5",@"p6"] andHideLeftRight:NO];
-        
+        _scrollBannerFBC = [[ScrollBannerFBC alloc] initWithFrame:CGRectMake(0, -20, [UIScreen mainScreen].bounds.size.width , [UIScreen mainScreen].bounds.size.width * 0.7) andBannerArray:@[@"1",@"2",@"3",@"4",@"5",@"6"] andBannerBackGroundArray:@[@"p1",@"p2",@"p3",@"p4",@"p5",@"p6"] andHideLeftRight:NO];
+        _scrollBannerFBC.delegate = self;
+        _scrollBannerFBC.userInteractionEnabled = YES;
     }
     return _scrollBannerFBC;
 }
@@ -117,8 +128,6 @@
             [self addChildViewController:vc];
             
         }
-        
-        [self.view addSubview:_scrollMenu.myPlusShowBackView];
     }
     return _scrollMenu;
 }
@@ -141,6 +150,7 @@
 -(UIView *)headTopView{
     if (!_headTopView) {
         _headTopView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 300)];
+        _headTopView.userInteractionEnabled = YES;
         _headTopView.backgroundColor = [UIColor redColor];
     }
     return _headTopView;
@@ -242,7 +252,7 @@
             [v addSubview:self.scrollMenu];
             [v addSubview:self.scrollMenu.plusMenuBTN];
             [v addSubview:self.scrollMenu.contentScrollView];
-            
+            [v addSubview:_scrollMenu.myPlusShowBackView];
             return v;
         }
         
@@ -315,6 +325,8 @@
             //weakSelf.navigationController.navigationBar.alpha = 1;
             weakSelf.navigationController.navigationBar.translucent = NO;
             [weakSelf.navigationController.navigationBar addSubview:weakSelf.searchView];
+            [weakSelf.navigationController.navigationBar addSubview:weakSelf.headMessage];
+            weakSelf.searchView.layer.borderColor = [UIColor lightGrayColor].CGColor;
         }];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"yes"}];
@@ -326,16 +338,33 @@
         [UIView animateWithDuration:0.3 animations:^{
             
             __weak __typeof__(self) weakSelf = self;
+            //weakSelf.navView.alpha = y/300;
             weakSelf.navigationController.navigationBar.hidden = YES;
             //weakSelf.navigationController.navigationBar.alpha = 0;
             weakSelf.navigationController.navigationBar.translucent = YES;
             [weakSelf.navView addSubview:weakSelf.searchView];
+            [weakSelf.navView addSubview:weakSelf.headMessage];
+            [weakSelf.scrollBannerFBC addSubview:weakSelf.navView];
+             weakSelf.searchView.layer.borderColor = [UIColor whiteColor].CGColor;
         }];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"no"}];
     }
     
 }
+
+//代理事件
+//图片被点击事件
+-(void)imageViewIsTaped:(UITapGestureRecognizer *)tap{
+    
+    NSLog(@"imageViewIsTaped %ld",tap.view.tag);
+}
+//自动滚动到哪一张图，非人为拖动
+-(void)autoScrollToWhichBanner:(UIImageView *)imageView{
+    
+    NSLog(@"autoScrollToWhichBanner %ld",imageView.tag);
+}
+
 /*
  ScrollMenuDIYFBCDelgate  代理事件，根据需求可用可不用
  */

@@ -340,7 +340,8 @@
     
     if (!_myPlusShowView) {
         //弹窗父和子视图
-        _myPlusShowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCW, 210)];
+        _myPlusShowView = [[UIView alloc] initWithFrame:CGRectMake(0, 44, SCW, 210)];
+        //_myPlusShowView.center = CGPointMake(SCW/2,self.frame.size.height);
         _myPlusShowView.backgroundColor = [UIColor orangeColor];
         //[self.view addSubview:plusShowView];
     }

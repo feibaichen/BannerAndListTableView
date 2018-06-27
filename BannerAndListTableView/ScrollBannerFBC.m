@@ -50,7 +50,7 @@
     
     for (int i = 0; i < _dataArray.count; i++) {
         
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i * self.bgChangeVFrame.size.width  +  65, 40, self.bgChangeVFrame.size.width - 130 ,  self.bgChangeVFrame.size.height - 80)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i * self.bgChangeVFrame.size.width  +  65, 120, self.bgChangeVFrame.size.width - 130 ,  self.bgChangeVFrame.size.height - 140)];
         imageView.userInteractionEnabled = YES;
         imageView.clipsToBounds = YES ;
         imageView.layer.cornerRadius = 10;
@@ -325,7 +325,7 @@
 -(UIImageView *)leftV{
     if (!_leftV) {
         
-        _leftV = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.bgChangeVFrame.size.height * 0.33, self.bgChangeVFrame.size.width * 0.4, self.bgChangeVFrame.size.height * 0.5)];
+        _leftV = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.bgChangeVFrame.size.height * 0.4, self.bgChangeVFrame.size.width * 0.4, self.bgChangeVFrame.size.height * 0.4)];
         _leftV.image = [UIImage imageNamed:_dataArray[_dataArray.count - 1]];
         //_leftV.backgroundColor = [UIColor redColor];
         _leftV.clipsToBounds = YES ;
@@ -336,7 +336,7 @@
 -(UIImageView *)rightV{
     if (!_rightV) {
         
-        _rightV = [[UIImageView alloc] initWithFrame:CGRectMake(self.bgChangeVFrame.size.width - self.bgChangeVFrame.size.width * 0.4 , self.bgChangeVFrame.size.height * 0.33, self.bgChangeVFrame.size.width * 0.4, self.bgChangeVFrame.size.height * 0.5)];
+        _rightV = [[UIImageView alloc] initWithFrame:CGRectMake(self.bgChangeVFrame.size.width - self.bgChangeVFrame.size.width * 0.4 , self.bgChangeVFrame.size.height * 0.4, self.bgChangeVFrame.size.width * 0.4, self.bgChangeVFrame.size.height * 0.4)];
         _rightV.image = [UIImage imageNamed:_dataArray[2]];;
         //_rightV.backgroundColor = [UIColor blueColor];
         _rightV.clipsToBounds = YES ;
