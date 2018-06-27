@@ -20,6 +20,9 @@
 @property (nonatomic,strong) NSArray *dataArray;
 @property (nonatomic,strong) UIView *headTopView;
 
+@property (nonatomic,strong) UIView *navView;
+@property (nonatomic,strong) UIView *searchView;
+
 @property (nonatomic,strong) ScrollBannerFBC *scrollBannerFBC;
 @property (nonatomic,strong) ScrollMenuView *scrollMenu;
 
@@ -29,6 +32,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    //self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+    self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.hidden = YES;
 }
 
@@ -43,11 +48,36 @@
     [self setUpNav];
 }
 -(void)setUpNav{
-    UIView *navView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 64)];
-    navView.alpha = 0;
-    navView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:navView];
+
+    [self.view addSubview:self.navView];
     
+    [self.navView addSubview:self.searchView];
+    
+}
+-(UIView *)searchView{
+    if (!_searchView) {
+        
+        _searchView = [[UIView alloc] initWithFrame:CGRectMake(30, 7, SCREENW - 30 - 60, 30)];
+        _searchView.layer.borderWidth = 0.5;
+        _searchView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapSearch)];
+        [_searchView addGestureRecognizer:tap];
+    }
+    return _searchView;
+}
+-(void)tapSearch{
+    MainViewController *main = [MainViewController new];
+    [self.navigationController pushViewController:main animated:YES];
+}
+-(UIView *)navView{
+    if (!_navView) {
+        
+        _navView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 44)];
+        _navView.alpha = 0.5;
+        //_navView.hidden = YES;
+        _navView.backgroundColor = [UIColor clearColor];
+    }
+    return _navView;
 }
 -(ScrollBannerFBC *)scrollBannerFBC{
     
@@ -265,15 +295,26 @@
     
     float y = scrollView.contentOffset.y;
     
+    [UIView animateWithDuration:0.3 animations:^{
+        
+        __weak __typeof__(self) weakSelf = self;
+        weakSelf.navigationController.navigationBar.hidden = NO;
+        weakSelf.navigationController.navigationBar.alpha = y/300;
+        
+    }];
+    
+    
     if (y >= 300) {
         NSLog(@"y >= 300--------");
+        
         
         [UIView animateWithDuration:0.3 animations:^{
             
             __weak __typeof__(self) weakSelf = self;
             
-            weakSelf.navigationController.navigationBar.hidden = NO;
+            //weakSelf.navigationController.navigationBar.alpha = 1;
             weakSelf.navigationController.navigationBar.translucent = NO;
+            [weakSelf.navigationController.navigationBar addSubview:weakSelf.searchView];
         }];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"yes"}];
@@ -286,8 +327,9 @@
             
             __weak __typeof__(self) weakSelf = self;
             weakSelf.navigationController.navigationBar.hidden = YES;
+            //weakSelf.navigationController.navigationBar.alpha = 0;
             weakSelf.navigationController.navigationBar.translucent = YES;
-            
+            [weakSelf.navView addSubview:weakSelf.searchView];
         }];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"no"}];
