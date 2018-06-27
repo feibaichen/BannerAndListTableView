@@ -270,9 +270,10 @@
         
         [UIView animateWithDuration:0.3 animations:^{
             
+            __weak __typeof__(self) weakSelf = self;
             
-            self.navigationController.navigationBar.hidden = NO;
-            self.navigationController.navigationBar.translucent = NO;
+            weakSelf.navigationController.navigationBar.hidden = NO;
+            weakSelf.navigationController.navigationBar.translucent = NO;
         }];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"yes"}];
@@ -283,10 +284,10 @@
         
         [UIView animateWithDuration:0.3 animations:^{
             
+            __weak __typeof__(self) weakSelf = self;
+            weakSelf.navigationController.navigationBar.hidden = YES;
+            weakSelf.navigationController.navigationBar.translucent = YES;
             
-            self.navigationController.navigationBar.hidden = YES;
-            self.navigationController.navigationBar.translucent = YES;
-            [self.tableView reloadData];
         }];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"no"}];
