@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "ScrollBannerFBC.h"
 #import "ScrollMenuView.h"
+#import "SquareUpFBC.h"
 #import "MainViewController.h"
 
 #define SCREENW [UIScreen mainScreen].bounds.size.width
@@ -26,6 +27,7 @@
 
 @property (nonatomic,strong) ScrollBannerFBC *scrollBannerFBC;
 @property (nonatomic,strong) ScrollMenuView *scrollMenu;
+@property (nonatomic,strong) SquareUpFBC *squareUp;
 
 @end
 
@@ -47,6 +49,7 @@
     [self.view addSubview:self.tableView];
     
     [self setUpNav];
+
 }
 -(void)setUpNav{
 
@@ -88,6 +91,15 @@
         _navView.backgroundColor = [UIColor clearColor];
     }
     return _navView;
+}
+-(UIView *)squareUp{
+    
+    if (!_squareUp) {
+        
+        _squareUp = [[SquareUpFBC alloc] initWithBaseFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.width * 0.7 - 44, SCREENW, 140) andNum_of_squareness:8 andNum_of_squareness_horizontal:4 andSquareness_width:40 andSquareness_height:40 andSquareness_padding_to_top:15 andSquareness_padding_to_left:40 andSquareness_padding_to_right:40 andSquareness_avage_distence_horizental:30 andSquareness_avage_distence_vertical:20];
+        _squareUp.backgroundColor = [UIColor lightGrayColor];
+    }
+    return _squareUp;
 }
 -(ScrollBannerFBC *)scrollBannerFBC{
     
@@ -149,9 +161,9 @@
 }
 -(UIView *)headTopView{
     if (!_headTopView) {
-        _headTopView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 300)];
+        _headTopView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width * 0.7 - 44 + 140)];
         _headTopView.userInteractionEnabled = YES;
-        _headTopView.backgroundColor = [UIColor redColor];
+        _headTopView.backgroundColor = [UIColor blueColor];
     }
     return _headTopView;
 }
@@ -197,6 +209,7 @@
         if ([indexPath section] == 0) {
             
             [cell.contentView addSubview:self.headTopView];
+            [cell.contentView addSubview:self.squareUp];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }else{
             
@@ -224,7 +237,7 @@
         
         if ([indexPath section] == 0) {
             
-            return 300;
+            return 400;
             
         }else{
             
@@ -272,7 +285,7 @@
             
         }else{
             
-            return self.view.frame.size.height;
+            return self.view.frame.size.height ;
         }
         
     }else{
@@ -290,7 +303,8 @@
     
     float y = scrollView.contentOffset.y;
     
-    if (y >= 300) {
+    if (y >= 400) {
+        self.navigationController.navigationBar.hidden = NO;
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"yes"}];
     }else{
@@ -309,12 +323,12 @@
         
         __weak __typeof__(self) weakSelf = self;
         weakSelf.navigationController.navigationBar.hidden = NO;
-        weakSelf.navigationController.navigationBar.alpha = y/300;
+        weakSelf.navigationController.navigationBar.alpha = y / 400;
         
     }];
     
     
-    if (y >= 300) {
+    if (y >= 400) {
         NSLog(@"y >= 300--------");
         
         

@@ -18,6 +18,7 @@
 		656634CC20E27D6C0011E723 /* ScrollBannerFBC.m in Sources */ = {isa = PBXBuildFile; fileRef = 656634CB20E27D6C0011E723 /* ScrollBannerFBC.m */; };
 		656634D220E284100011E723 /* ScrollMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 656634D120E284100011E723 /* ScrollMenuView.m */; };
 		656634D520E285C20011E723 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 656634D420E285C20011E723 /* MainViewController.m */; };
+		CBDA9FF820E4E318007245F2 /* SquareUpFBC.m in Sources */ = {isa = PBXBuildFile; fileRef = CBDA9FF720E4E318007245F2 /* SquareUpFBC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,8 @@
 		656634D120E284100011E723 /* ScrollMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollMenuView.m; sourceTree = "<group>"; };
 		656634D320E285C20011E723 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		656634D420E285C20011E723 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		CBDA9FF620E4E318007245F2 /* SquareUpFBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareUpFBC.h; sourceTree = "<group>"; };
+		CBDA9FF720E4E318007245F2 /* SquareUpFBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareUpFBC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +113,8 @@
 		6566349720E26D490011E723 /* BannerAndListTableView */ = {
 			isa = PBXGroup;
 			children = (
+				CBDA9FF620E4E318007245F2 /* SquareUpFBC.h */,
+				CBDA9FF720E4E318007245F2 /* SquareUpFBC.m */,
 				656634D020E2840F0011E723 /* ScrollMenuView.h */,
 				656634D120E284100011E723 /* ScrollMenuView.m */,
 				656634CA20E27D6B0011E723 /* ScrollBannerFBC.h */,
@@ -283,6 +288,7 @@
 				656634D220E284100011E723 /* ScrollMenuView.m in Sources */,
 				656634A820E26D4C0011E723 /* main.m in Sources */,
 				6566349A20E26D490011E723 /* AppDelegate.m in Sources */,
+				CBDA9FF820E4E318007245F2 /* SquareUpFBC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,14 +459,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AZWK98U2MN;
+				DEVELOPMENT_TEAM = E2G89NQZCS;
 				INFOPLIST_FILE = BannerAndListTableView/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = feibaichen.BannerAndListTableView;
+				PRODUCT_BUNDLE_IDENTIFIER = feibaichen1.BannerAndListTableView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -473,14 +479,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AZWK98U2MN;
+				DEVELOPMENT_TEAM = E2G89NQZCS;
 				INFOPLIST_FILE = BannerAndListTableView/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = feibaichen.BannerAndListTableView;
+				PRODUCT_BUNDLE_IDENTIFIER = feibaichen1.BannerAndListTableView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
