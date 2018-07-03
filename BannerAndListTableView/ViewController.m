@@ -36,7 +36,7 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    //self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+    
     //self.navigationController.navigationBar.translucent = YES;
     
     self.navigationController.navigationBar.hidden = NO;
@@ -45,7 +45,7 @@
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     
-    self.navigationController.navigationBar.hidden = YES;
+    //self.navigationController.navigationBar.hidden = YES;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -97,8 +97,8 @@
     [header setImages:idleImages forState:MJRefreshStateIdle];
     [header setImages:refreshingImages forState:MJRefreshStatePulling];
     [header setImages:refreshingImages forState:MJRefreshStateRefreshing];
-    //[header setIgnoredScrollViewContentInsetTop:100];
-    header.mj_h = 60;
+    [header setIgnoredScrollViewContentInsetTop:30];
+    header.mj_h = 80;
     header.lastUpdatedTimeLabel.hidden =YES;
     header.stateLabel.hidden = YES;
     
@@ -117,15 +117,11 @@
 -(void)clickHeader{
     
     [self.tableView.mj_header beginRefreshing];
-    
-    self.navigationController.navigationBar.translucent = NO;
-    
     __weak __typeof__(self) weakSelf = self;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        //[weakSelf.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
-        [weakSelf.tableView.mj_header endRefreshing];
         
+        [weakSelf.tableView.mj_header endRefreshing];
         
     });
     
@@ -232,16 +228,6 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         
-        
-//        if (@available(iOS 11.0, *)) {
-//
-//            _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-//
-//            _tableView.contentInset = UIEdgeInsetsMake(64, 0, 49, 0);
-//
-//            _tableView.scrollIndicatorInsets = _tableView.contentInset;
-//
-//        }
     }
     return _tableView;
 }
@@ -429,7 +415,7 @@
     NSLog(@"-------scroll----------");
     
     float y = scrollView.contentOffset.y;
-    
+
     [UIView animateWithDuration:0.3 animations:^{
         
         __weak __typeof__(self) weakSelf = self;
