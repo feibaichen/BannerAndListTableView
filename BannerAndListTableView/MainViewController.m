@@ -22,6 +22,7 @@
     
     [self.view addSubview:self.producListTableView];
     
+    
 }
 -(void)postNetWorkingWithTitle:(NSString *)titleStr{
     self.myTitle = [NSString stringWithFormat:@"%@",titleStr];
@@ -32,9 +33,12 @@
     
     
     if ([sender.userInfo[@"insideScrollEnable"] isEqualToString:@"yes"]) {
+        
         _producListTableView.scrollEnabled = YES;
+        
     }else{
         _producListTableView.scrollEnabled = NO;
+        [_producListTableView setContentOffset:CGPointZero];
     }
     
 }
@@ -44,6 +48,7 @@
         _producListTableView.delegate = self;
         _producListTableView.dataSource = self;
         //_producListTableView.bounces = NO;
+        [_producListTableView setContentOffset:CGPointZero];
         _producListTableView.scrollEnabled = NO;
     }
     return _producListTableView;
@@ -79,9 +84,10 @@
     
     float y = scrollView.contentOffset.y;
     
-    if (y == 0) {
+    if (y <= 0) {
         
         _producListTableView.scrollEnabled = NO;
+        [_producListTableView setContentOffset:CGPointZero];
         
     }else{
         _producListTableView.scrollEnabled = YES;
@@ -95,6 +101,7 @@
     
     if (y < 0) {
         _producListTableView.scrollEnabled = NO;
+        [_producListTableView setContentOffset:CGPointZero];
     }
 }
 - (void)didReceiveMemoryWarning {

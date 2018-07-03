@@ -11,6 +11,7 @@
 #import "ScrollMenuView.h"
 #import "SquareUpFBC.h"
 #import "MainViewController.h"
+#import "MJRefresh.h"
 
 #define SCREENW [UIScreen mainScreen].bounds.size.width
 #define SCREENH [UIScreen mainScreen].bounds.size.height
@@ -37,12 +38,20 @@
     [super viewWillAppear:animated];
     //self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
     //self.navigationController.navigationBar.translucent = YES;
+    
+    self.navigationController.navigationBar.hidden = NO;
+
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    
     self.navigationController.navigationBar.hidden = YES;
 }
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    [self setHeadRefresh];
     
     [self.headTopView addSubview:self.scrollBannerFBC];
      
@@ -58,6 +67,80 @@
     [self.navView addSubview:self.searchView];
     
     [self.navView addSubview:self.headMessage];
+    
+}
+-(void)setHeadRefresh{
+    
+    // 设置普通状态的动画图片
+    NSMutableArray *idleImages = [NSMutableArray array];
+    for (NSUInteger i = 1; i<=60; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"dropdown_anim__000%zd", i]];
+        [idleImages addObject:image];
+    }
+    
+    
+    // 设置即将刷新状态的动画图片（一松开就会刷新的状态）
+    NSMutableArray *refreshingImages = [NSMutableArray array];
+    for (NSUInteger i = 1; i<=3; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"dropdown_loading_0%zd", i]];
+        [refreshingImages addObject:image];
+    }
+    
+    
+    
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+    MJRefreshGifHeader *header = [MJRefreshGifHeader headerWithRefreshingTarget:self refreshingAction:@selector(clickHeader)];
+    
+    [header setImages:idleImages forState:MJRefreshStateIdle];
+    [header setImages:refreshingImages forState:MJRefreshStatePulling];
+    [header setImages:refreshingImages forState:MJRefreshStateRefreshing];
+    //[header setIgnoredScrollViewContentInsetTop:100];
+    header.mj_h = 60;
+    header.lastUpdatedTimeLabel.hidden =YES;
+    header.stateLabel.hidden = YES;
+    
+    self.tableView.mj_header = header;
+    
+//    MJRefreshBackGifFooter *footer = [MJRefreshBackGifFooter footerWithRefreshingTarget:self refreshingAction:@selector(clickFooter)];
+//
+//    [footer setImages:idleImages forState:MJRefreshStateIdle];
+//    [footer setImages:refreshingImages forState:MJRefreshStatePulling];
+//    [footer setImages:refreshingImages forState:MJRefreshStateRefreshing];
+//
+//    footer.stateLabel.hidden = YES;
+//
+//    self.tableView.mj_footer = footer;
+}
+-(void)clickHeader{
+    
+    [self.tableView.mj_header beginRefreshing];
+    
+    self.navigationController.navigationBar.translucent = NO;
+    
+    __weak __typeof__(self) weakSelf = self;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        //[weakSelf.tableView setContentOffset:CGPointMake(0, 0) animated:YES];
+        [weakSelf.tableView.mj_header endRefreshing];
+        
+        
+    });
+    
+}
+-(void)clickFooter{
+    [self.tableView.mj_footer beginRefreshing];
+    
+    __weak __typeof__(self) weakSelf = self;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        [weakSelf.tableView.mj_footer endRefreshing];
+    });
+    
+    
     
 }
 -(UIView *)searchView{
@@ -148,6 +231,17 @@
         _tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        
+        
+//        if (@available(iOS 11.0, *)) {
+//
+//            _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+//
+//            _tableView.contentInset = UIEdgeInsetsMake(64, 0, 49, 0);
+//
+//            _tableView.scrollIndicatorInsets = _tableView.contentInset;
+//
+//        }
     }
     return _tableView;
 }
@@ -298,19 +392,36 @@
     
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"no"}];
+    self.navigationController.navigationBar.hidden = NO;
+    
 }
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
     float y = scrollView.contentOffset.y;
     
+    self.navigationController.navigationBar.hidden = NO;
+    
+    if (y <= 0) {
+
+    [UIView animateWithDuration:0.1 animations:^{
+        
+        __weak __typeof__(self) weakSelf = self;
+        [weakSelf.tableView setContentOffset:CGPointMake(0, -20)];
+    }];
+        
+    }
+    
+    
     if (y >= 400) {
-        self.navigationController.navigationBar.hidden = NO;
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"yes"}];
     }else{
+    
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"no"}];
+        
     }
+    
 
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -329,7 +440,7 @@
     
     
     if (y >= 400) {
-        NSLog(@"y >= 300--------");
+        NSLog(@"y >= 400--------");
         
         
         [UIView animateWithDuration:0.3 animations:^{
@@ -349,12 +460,10 @@
         
         NSLog(@"y < 300");
         
+        
         [UIView animateWithDuration:0.3 animations:^{
             
             __weak __typeof__(self) weakSelf = self;
-            //weakSelf.navView.alpha = y/300;
-            weakSelf.navigationController.navigationBar.hidden = YES;
-            //weakSelf.navigationController.navigationBar.alpha = 0;
             weakSelf.navigationController.navigationBar.translucent = YES;
             [weakSelf.navView addSubview:weakSelf.searchView];
             [weakSelf.navView addSubview:weakSelf.headMessage];
@@ -363,6 +472,7 @@
         }];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"scrollToTop" object:nil userInfo:@{@"insideScrollEnable":@"no"}];
+        
     }
     
 }
@@ -393,6 +503,9 @@
 }
 -(void)scrollToWhichMenu:(int)MenuSegmentIndex{
     NSLog(@"v----scrollToWhichMenu = %d",MenuSegmentIndex);
+}
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
